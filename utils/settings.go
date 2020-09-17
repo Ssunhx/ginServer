@@ -32,7 +32,16 @@ func init() {
 
 // 初始化 server 配置
 func LoadServer(file *ini.File) {
-	AppMode = file.Section("server").Key("AppMode").String()
+	mode := file.Section("server").Key("Mode").String()
+	if mode == "1" {
+		AppMode = "debug"
+	} else if mode == "0" {
+		AppMode = "test"
+	} else if mode == "2" {
+		AppMode = "release"
+	} else {
+		AppMode = ""
+	}
 	HttpPort = file.Section("server").Key("httpPort").String()
 }
 
