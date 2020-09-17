@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"ginserver/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"time"
@@ -49,5 +50,5 @@ func GetDB() *gorm.DB {
 
 // 迁移数据库表
 func MigrateTables() {
-	//DB.AutoMigrate()
+	DB.AutoMigrate(&model.Role{}, &model.User{})
 }
