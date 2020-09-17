@@ -12,8 +12,8 @@ var DB *gorm.DB
 var err error
 
 func InitDB() {
-	dsn := fmt.Sprintf("%v:%v@tcp(%v)/%v?charset=utf8mb4&parseTime=true&loc=Local", UserName,
-		Password, Host, DBName)
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=true&loc=Local", UserName,
+		Password, Host, Port, DBName)
 
 	DB, err = gorm.Open(mysql.New(mysql.Config{
 		//DriverName:                "",	// 可以使用自定义的驱动
