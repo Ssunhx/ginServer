@@ -2,6 +2,7 @@ package router
 
 import (
 	v1 "ginserver/api/v1"
+	"ginserver/middleware"
 	"ginserver/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -14,9 +15,12 @@ func InitRouter() {
 	r := gin.Default()
 
 	// 分组路由
-	auth := r.Group("api/v1/")
+	// 此路由组需要验证 token
+	token_router := r.Group("api/v1/")
+	// 使用中间件验证 token
+	token_router.Use(middleware.VerifyJwtToken())
 	{
-		auth.POST("user/add", v1.AddUser)
+		token_router.POST("user/add", v1.AddUser)
 	}
 
 	router_v1 := r.Group("api/v1")
