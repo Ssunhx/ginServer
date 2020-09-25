@@ -19,5 +19,11 @@ func InitRouter() {
 		auth.POST("user/add", v1.AddUser)
 	}
 
+	router_v1 := r.Group("api/v1")
+	// 次路由组不需要验证 token，
+	{
+		router_v1.POST("user/login", v1.Login)
+	}
+
 	_ = r.Run(utils.HttpPort)
 }
