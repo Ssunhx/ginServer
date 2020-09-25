@@ -40,3 +40,16 @@ func CreateUser(user *User) int {
 	}
 	return utils.SUCCESS
 }
+
+func CheckLogin(username string, password string) int {
+	var user User
+	DB.Where("username = ?", username).First(&user)
+	if user.ID == 0 {
+		return utils.USER_NOT_EXIST
+	}
+
+	if utils.ScryptPassword(password) != user.Password {
+		return utils.USER_PASSWORD_ERROR
+	}
+	return utils.SUCCESS
+}
