@@ -1,6 +1,9 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"ginserver/utils"
+	"gorm.io/gorm"
+)
 
 type Role struct {
 	ID   int
@@ -20,6 +23,20 @@ type User struct {
 	Role   Role `gorm:"ForeignKey:RoleID"`
 }
 
-func CheckUser(username string) {
+func CheckUser(username string) int {
+	var user User
+	DB.Where("username = ?", username).First(&user)
+	// 用户名已存在
+	if user.ID > 0{
+		return utils.USERNAME_USED
+	}
+	return utils.SUCCESS
+}
 
+func CreateUser(user *User) int {
+	err := DB.Create(&user).Error
+	if err != nil {
+		return utils.ERROR
+	}
+	return utils.SUCCESS
 }
