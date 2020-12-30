@@ -1,10 +1,11 @@
-package utils
+package model
 
 import (
 	"fmt"
-	"ginserver/model"
+	"ginserver/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	//"log"
 	"time"
 )
 
@@ -12,9 +13,17 @@ import (
 var DB *gorm.DB
 var err error
 
+//var Logger log.Logger
+
+//func init()  {
+//	Logger := utils.GetLogger()
+//	Logger.Println("init db")
+//}
+
 func InitDB() {
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=true&loc=Local", UserName,
-		Password, Host, Port, DBName)
+	Logger := utils.GetLogger()
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=true&loc=Local", utils.UserName,
+		utils.Password, utils.Host, utils.Port, utils.DBName)
 
 	DB, err = gorm.Open(mysql.New(mysql.Config{
 		//DriverName:                "",	// 可以使用自定义的驱动
@@ -28,7 +37,7 @@ func InitDB() {
 	}), &gorm.Config{})
 
 	if err != nil {
-		logger.Println("connect database error, please check your config")
+		Logger.Println("connect database error, please check your config")
 	}
 
 	// 数据库连接池设置
@@ -50,5 +59,5 @@ func GetDB() *gorm.DB {
 
 // 迁移数据库表
 func MigrateTables() {
-	DB.AutoMigrate(&model.Role{}, &model.User{})
+	DB.AutoMigrate(&Role{}, &User{}, &Image{})
 }
