@@ -1,11 +1,16 @@
 package main
 
-import "ginserver/utils"
+import (
+	"ginserver/model"
+	"ginserver/router"
+)
 
 func main() {
 	// 初始化 DB
-	utils.InitDB()
+	model.InitDB()
 
 	// 迁移表结构
-	utils.MigrateTables()
+	model.MigrateTables()
+
+	router.InitRouter()
 }
