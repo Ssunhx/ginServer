@@ -20,13 +20,14 @@ func InitRouter() {
 	// 使用中间件验证 token
 	token_router.Use(middleware.VerifyJwtToken())
 	{
-		token_router.POST("user/add", v1.AddUser)
+
 	}
 
-	router_v1 := r.Group("api/v1")
+	router_v1 := r.Group("api/v1/")
 	// 次路由组不需要验证 token，
 	{
 		router_v1.POST("user/login", v1.Login)
+		router_v1.POST("user/add", v1.AddUser)
 	}
 
 	_ = r.Run(utils.HttpPort)
