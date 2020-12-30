@@ -42,7 +42,7 @@ func LoadServer(file *ini.File) {
 	} else {
 		AppMode = ""
 	}
-	HttpPort = file.Section("server").Key("httpPort").String()
+	HttpPort = file.Section("server").Key("HttpPort").String()
 }
 
 // 初始化 DB 配置
