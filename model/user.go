@@ -13,7 +13,7 @@ type Role struct {
 type User struct {
 	// 包含了默认的四个字段
 	gorm.Model
-	UserName string `gorm:"type:varchar(20);not null" json:"username"`
+	Username string `gorm:"type:varchar(20);not null" json:"username"`
 	Password string `gorm:"type:varchar(20); default:123456" json:"password"`
 	Mobile   string `gorm:"type:char(11)" json:"mobile"`
 	Sex      int    `gorm:"type:tinyint(1); default:0" json:"sex"`
@@ -27,7 +27,7 @@ func CheckUser(username string) int {
 	var user User
 	DB.Where("username = ?", username).First(&user)
 	// 用户名已存在
-	if user.ID > 0{
+	if user.ID > 0 {
 		return utils.USERNAME_USED
 	}
 	return utils.SUCCESS

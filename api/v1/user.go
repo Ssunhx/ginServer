@@ -13,14 +13,14 @@ var code int
 func AddUser(c *gin.Context) {
 	var user model.User
 	_ = c.ShouldBindJSON(&user)
-	code = model.CheckUser(user.UserName)
+	code = model.CheckUser(user.Username)
 
 	if code == utils.SUCCESS {
 		code = model.CreateUser(&user)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
-		"data":    user,
+		"data":    user.Username,
 		"message": utils.GetErrMsg(code),
 	})
 
@@ -35,10 +35,10 @@ func Login(c *gin.Context) {
 	var code int
 
 	// 检查用户名和密码
-	code = model.CheckLogin(data.UserName, data.Password)
+	code = model.CheckLogin(data.Username, data.Password)
 	if code == utils.SUCCESS {
 		// 用户校验通过之后，生成 token，若验证未通过， token 为空
-		token, code = middleware.GenJwtToken(data.UserName)
+		token, code = middleware.GenJwtToken(data.Username)
 	} else {
 		code = utils.ERROR
 	}
