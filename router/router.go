@@ -20,7 +20,7 @@ func InitRouter() {
 	// 使用中间件验证 token
 	token_router.Use(middleware.VerifyJwtToken())
 	{
-
+		token_router.POST("image/upload", v1.UploadImg)
 	}
 
 	router_v1 := r.Group("api/v1/")

@@ -11,6 +11,7 @@ const (
 	USER_TOKEN_NOT_EXIST    = 1004
 	USER_TOKEN_VERIFY_ERROR = 1005
 	USER_TOKEN_EXPIRED      = 1006
+	UPLOAD_FILE_IS_EMPTY    = 2001
 )
 
 var codeMsg = map[int]string{
@@ -22,6 +23,7 @@ var codeMsg = map[int]string{
 	USER_TOKEN_NOT_EXIST:    "用户token不存在",
 	USER_TOKEN_VERIFY_ERROR: "用户token验证失败",
 	USER_TOKEN_EXPIRED:      "用户token过期",
+	UPLOAD_FILE_IS_EMPTY:    "未选择文件",
 }
 
 func GetErrMsg(code int) string {
