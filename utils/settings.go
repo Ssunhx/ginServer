@@ -16,6 +16,12 @@ var (
 	UserName string
 	Password string
 	DBName   string
+
+	// 七牛云配置
+	QiniuAccessKey  string
+	QiniuSecretKey  string
+	QiniuBucketName string
+	QiniuDomain     string
 )
 
 func init() {
@@ -28,6 +34,7 @@ func init() {
 	}
 	LoadServer(file)
 	LoadDB(file)
+	LoadQiNiu(file)
 }
 
 // 初始化 server 配置
@@ -52,4 +59,12 @@ func LoadDB(file *ini.File) {
 	UserName = file.Section("database").Key("UserName").String()
 	Password = file.Section("database").Key("Password").String()
 	DBName = file.Section("database").Key("DBName").String()
+}
+
+// 初始化七牛云 oss
+func LoadQiNiu(file *ini.File) {
+	QiniuAccessKey = file.Section("qiniu").Key("accessKey").String()
+	QiniuSecretKey = file.Section("qiniu").Key("secretKey").String()
+	QiniuBucketName = file.Section("qiniu").Key("qiniu_bucket_name").String()
+	QiniuDomain = file.Section("qiniu").Key("qiniu_domain").String()
 }
