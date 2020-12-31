@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// 用户签名，不能泄漏
 var Jwtkey = []byte("daiow3wnqdw09qn")
 
 type MyClaims struct {

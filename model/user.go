@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"ginserver/utils"
 	"gorm.io/gorm"
 )
@@ -39,6 +40,22 @@ func CreateUser(user *User) int {
 		return utils.ERROR
 	}
 	return utils.SUCCESS
+}
+
+// 使用钩子函数加密用户密码，不用显示调用，只需要指向结构体即可
+// 其他类似的钩子函数还有：
+// create object ：BeforeSave、BeforeCreate、AfterCreate、AfterSave
+// update object：BeforeSave、BeforeUpdate、AfterUpdate、 AfterSave
+// delete object：BeforeDelete、AfterDelete
+// query object: AfterFind
+
+func (u *User) BeforeSave(tx *gorm.DB) (err error) {
+	pwd := utils.ScryptPassword(u.Password)
+	if pwd == "" {
+		return errors.New("scrypt password error")
+	}
+	u.Password = pwd
+	return nil
 }
 
 func CheckLogin(username string, password string) int {
