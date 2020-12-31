@@ -59,3 +59,21 @@ func GenUUID() string {
 	u2 := uuid2.NewV4()
 	return u2.String()
 }
+
+// 删除图片
+func DeleteImg(filename string) bool {
+	mac := getMac()
+	cfg := storage.Config{
+		UseHTTPS: true,
+		Zone:     &storage.ZoneHuanan,
+	}
+
+	bucketmanager := storage.NewBucketManager(mac, &cfg)
+
+	err := bucketmanager.Delete(QiniuBucketName, filename)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	return true
+}

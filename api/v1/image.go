@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -67,6 +68,86 @@ func UploadImg(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    img.ImagePath,
+		"message": utils.GetErrMsg(code),
+	})
+}
+
+// 获取当前用户下的 image
+func GetImg(c *gin.Context) {
+	//var img model.Image
+
+	username := c.Keys["username"]
+	userid := model.GetUserId(username.(string))
+
+	data := model.GetImgByUserId(int(userid))
+	code = utils.SUCCESS
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"data":    data,
+		"message": utils.GetErrMsg(code),
+	})
+}
+
+// 删除 image
+func DeleteImg(c *gin.Context) {
+	username := c.Keys["username"]
+	userid := model.GetUserId(username.(string))
+
+	imageid, _ := strconv.Atoi(c.Request.FormValue("imageid"))
+
+	img := model.GetImgById(imageid)
+
+	if img.ID <= 0 {
+		code = utils.IMAGE_NOT_FOUND
+	} else if img.AuthID != int(userid) {
+		code = utils.NO_PER_TO_DELETE_IMAGE
+	} else {
+		// 数据库逻辑删除
+		code = model.DeleteImg(imageid)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"data":    img.ID,
+		"message": utils.GetErrMsg(code),
+	})
+}
+
+// 获取已经被删除的图片
+func GetDeletedImg(c *gin.Context) {
+	username := c.Keys["username"]
+	userid := model.GetUserId(username.(string))
+
+	data := model.GetDeleted(int(userid))
+
+	code = utils.SUCCESS
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"data":    data,
+		"message": utils.GetErrMsg(code),
+	})
+}
+
+func RealDeleteImg(c *gin.Context) {
+	username := c.Keys["username"]
+	userid := model.GetUserId(username.(string))
+
+	imageid, _ := strconv.Atoi(c.Request.FormValue("imageid"))
+
+	img := model.GetImgById(imageid)
+
+	if img.ID <= 0 {
+		code = utils.IMAGE_NOT_FOUND
+	} else if img.AuthID != int(userid) {
+		code = utils.NO_PER_TO_DELETE_IMAGE
+	} else {
+		// 七牛云 oss 删除
+		filename := strings.Split(img.ImagePath, "/")
+		utils.DeleteImg(filename[len(filename)-1])
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"data":    img.ID,
 		"message": utils.GetErrMsg(code),
 	})
 }
