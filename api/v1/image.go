@@ -19,9 +19,11 @@ func UploadImg(c *gin.Context) {
 	img.ImageDesc = c.Request.FormValue("imagedesc")
 	img.ImageTag = c.Request.FormValue("imagetag")
 
-	username := c.Request.FormValue("imageuser")
-
-	userid := model.GetUserId(username)
+	//username := c.Request.FormValue("imageuser")
+	// 在 jwt 验证时，已经设置了 username 参数，此处可以直接使用，不用前端传入 username 参数
+	username := c.Keys["username"]
+	// 断言，将 interface 类型转换为 string
+	userid := model.GetUserId(username.(string))
 	if userid < 0 {
 		userid = 1
 	}
