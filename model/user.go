@@ -25,13 +25,18 @@ type User struct {
 }
 
 func CheckUser(username string) int {
-	var user User
-	DB.Where("username = ?", username).First(&user)
+	id := GetUserId(username)
 	// 用户名已存在
-	if user.ID > 0 {
+	if id > 0 {
 		return utils.USERNAME_USED
 	}
 	return utils.SUCCESS
+}
+
+func GetUserId(username string) uint {
+	var user User
+	DB.Where("username = ?", username).First(&user)
+	return user.ID
 }
 
 func CreateUser(user *User) int {
